@@ -1,13 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>MP1</title>
+<html lang="en"> 
+    <head> <meta charset="utf-8" /> 
+        <meta http-equiv="x-ua-compatible" content="ie=edge"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <title>Danny Quillo - Portfolio</title> 
     </head>
     <body>
-        <h1>Hello World! Welcome to MP1!</h1>
-        <img src="assets/image.jpg">
-    </body>
+        <!-- Sticky Header (will style later)  -->
+        <header class="site-header">
+            <nav class="site-nav" aria-label="Primary">
+                <a class="brand" href="#hero">DQ</a>
+                <ul class="menu">
+                    <li><a href="#hero" data-nav>Home</a></li>
+                    <li><a href="#about" data-nav>About</a></li>
+                    <li><a href="#projects" data-nav>Projects</a></li>
+                    <li><a href="#experience" data-nav>Experience</a></li>
+                    <li><a href="#media" data-nav>Media</a></li>
+                    <li><a href="#contact" data-nav>Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <section id="hero" class="stripe" aria-label="Hero">
+                <div class="container">
+                    <h1>Hi! My name is Danny Quillo</h1>
+                    <p>Senior CS @ UIUC • GPA 3.61 • Systems & Web • SHPE Tech Team</p>
+                </div>
+            </section>
+
+            <section id="about" class="stripe" aria-label="About">
+                <div class="container">
+                    <h2>About</h2>
+                    <p>Short bio and skills go here.</p>
+                </div>
+            </section>
+
+            <section id="projects" class="stripe" aria-label="Projects">
+                <div class="container">
+                    <ul>
+                        <li>Nonstop Networking (CS 341)</li>
+                        <li>Spam Detector UI</li>
+                        <li>Spring Rain Website</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="experience" class="stripe" aria-label="Experience">
+                <div class="container">
+                    <h2>Experience</h2>
+                    <p>Roles and Impact bullets go here.</p>
+                </div>
+            </section>
+
+            <!-- Will come back later -->
+            <!-- <section id="media" class="stripe" aria-label="Media">
+                <div class="container">
+                    <h2>Media</h2>
+                    <video controls width="100%">
+                        <source src="assets/demo.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </section> -->
+
+            <section id="contact" class="stripe" aria-label="Contact">
+                <div class="container">
+                    <h2>Contact</h2>
+                    <p>Email: <a href="mailto:dannyq2@illinois.edu">dannyq2@illinois.edu</a></p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <div class="container">
+                <small>© <span id="year"></span> Daniel Quillo</small>
+            </div>
+        </footer>
+    </body> 
 </html>

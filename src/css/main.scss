@@ -1,1 +1,77 @@
 /* Your SCSS here. */
+// Vars & Simple tooling (will expand later)
+$bg: #0f1220; //page background
+$bg-2: #151935; //stripe alt
+$text: #e7e9f3;
+$muted: #b6bbd1;
+$accent: #7aa2ff;
+$maxw: 1100px;
+$nav-h: 72px;
+
+// Base
+* {box-sizing: border-box; }
+html, body { height: 100%; }
+html { scroll-behavior: smooth; } // smooth scrolling
+body {
+    margin: 0;
+    color: $text;
+    background: $bg;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+}
+
+//Layout Helpers
+.container {
+    width: min(100% - 2rem, #{$maxw});
+    margin-inline: auto;
+}
+
+// Stripes (full width sections)
+.stripe {padding-block: 4rem;}
+.stripe:nth-of-type(even) {background: $bg-2;}
+
+//Header/Nav (basic sticky stuff for now)
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(10, 12, 26, .85);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid rgba(225, 255, 255, 0.08);
+}
+
+.site-nav {
+    height: $nav-h;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    @extend .container;
+}
+
+.brand {
+    color: $text;
+    text-decoration: none;
+    font-weight: 800;
+}
+
+.menu {
+    list-style: none;
+    margin: 0 0 0 auto;
+    padding: 0;
+    display: flex;
+    gap: 1rem;
+    a {
+        color: $muted;
+        text-decoration: none;
+        padding: .5rem .75rem;
+        border-radius: 8px;
+        &:hover {
+            color: $text;
+            background: rgba(225, 255, 255, 0.08);
+        }
+    }
+}
+
+.site-footer {
+    padding-block: 2rem;
+    background: #0b0e1a;
+}
