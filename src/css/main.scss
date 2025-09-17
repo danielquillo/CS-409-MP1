@@ -11,7 +11,7 @@ $nav-h-sm: 56px;
 
 // Base
 * {box-sizing: border-box; }
-html, body { height: 100%; }
+html, body { min-height: 100vh; }
 html { scroll-behavior: smooth; } // smooth scrolling
 body {
     margin: 0;
@@ -35,9 +35,9 @@ body {
 .site-header {
     position: sticky;
     top: 0;
-    z-index: 10;
-    background: rgba(10, 12, 26, .85);
-    backdrop-filter: blur(6px);
+    z-index: 9999;
+    background: $bg;
+    backdrop-filter: none;
     border-bottom: 1px solid rgba(225, 255, 255, 0.08);
 }
 

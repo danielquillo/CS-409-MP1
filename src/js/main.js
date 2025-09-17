@@ -17,12 +17,8 @@ const SHRINK_AT = 80;   //px scrolled
 let ticking = false;
 window.addEventListener('scroll', () => {
     if (!ticking) {
-        window.requestAnimationFrame(() => {
-            if (window.scrollY > SHRINK_AT) {
-                siteNav.classList.add('nav-shrink');
-            } else {
-                siteNav.classList.remove('nav-shrink');
-            }
+        requestAnimationFrame(() => {
+            siteNav.classList.toggle('nav-shrink', window.scrollY > SHRINK_AT);
             ticking = false;
         });
         ticking = true;
