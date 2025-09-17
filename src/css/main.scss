@@ -86,9 +86,17 @@ body {
         text-decoration: none;
         padding: .5rem .75rem;
         border-radius: 8px;
+        transition: background .2s ease, color .2s ease;
+
         &:hover {
             color: $text;
             background: rgba(225, 255, 255, 0.08);
+        }
+
+        //NEW: active section highlight
+        &.active {
+            color: $text;
+            background: rgba(255, 255, 255, .14);
         }
     }
 }
