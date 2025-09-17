@@ -7,6 +7,7 @@ $muted: #b6bbd1;
 $accent: #7aa2ff;
 $maxw: 1100px;
 $nav-h: 72px;
+$nav-h-sm: 56px;
 
 // Base
 * {box-sizing: border-box; }
@@ -28,6 +29,7 @@ body {
 // Stripes (full width sections)
 .stripe {padding-block: 4rem;}
 .stripe:nth-of-type(even) {background: $bg-2;}
+.stripe { scroll-margin-top: $nav-h; }      //prevent anchor jump under sticky header
 
 //Header/Nav (basic sticky stuff for now)
 .site-header {
@@ -45,6 +47,26 @@ body {
     align-items: center;
     gap: 1rem;
     @extend .container;
+    transition: height .2s ease;
+
+    .brand {
+        font-weight: 800;
+        font-size: 1.25rem;
+        transition: font-size .2s ease;
+    }
+    .menu a {
+        transition: font-size .2s ease, background .2s ease, color .2s ease;
+    }
+
+    &.nav-shrink {
+        height: $nav-h-sm;
+        .brand {
+            font-size: 1.05rem;
+        }
+        .menu a {
+            font-size: 0.95rem;
+        }
+    }
 }
 
 .brand {
@@ -71,6 +93,7 @@ body {
     }
 }
 
+// Footer
 .site-footer {
     padding-block: 2rem;
     background: #0b0e1a;
