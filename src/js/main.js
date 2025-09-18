@@ -85,3 +85,25 @@ window.addEventListener('scroll', onScrollOrResize, {passive: true});
 window.addEventListener('resize', onScrollOrResize);
 
 updateActiveByNavPosition();
+
+// == Hero Role Rotator ==
+const roles = ["Software Developer", "CS Undergrad"];
+const rotator = document.getElementById('role-rotator');
+
+if (rotator) {
+    let i = 0;
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const swap = () => {
+        i = (i + 1) % roles.length;
+        rotator.classList.remove("role-swap");
+        rotator.offsetHeight; // trigger reflow
+        rotator.textContent = roles[i];
+        rotator.classList.add("role-swap");
+    };
+
+    if (!prefersReduced) {
+        setInterval(swap, 2500);
+    } else {
+        rotator.textContent = roles[0];
+    }
+}
