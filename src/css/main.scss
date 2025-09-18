@@ -8,6 +8,8 @@ $accent: #7aa2ff;
 $maxw: 1100px;
 $nav-h: 72px;
 $nav-h-sm: 56px;
+$stripe-pad: clamp(4rem, 8vw, 7rem);
+$stripe-pad-lg: clamp(6rem, 12vw, 10rem);
 
 // Base
 * {box-sizing: border-box; }
@@ -26,8 +28,21 @@ body {
     margin-inline: auto;
 }
 
-// Stripes (full width sections)
-.stripe {padding-block: 4rem;}
+// stripe stuff
+.stripe {padding-block: $stripe-pad;}
+.stripe--tall {
+    min-height: calc(100vh - #{$nav-h});
+    display: grid;
+    place-items: start;
+}
+
+.stripe--hero {
+    padding-top: clamp(6rem, 20vh, 24vh);
+}
+
+.stripe--roomy {
+    padding-block: $stripe-pad-lg;
+}
 .stripe:nth-of-type(even) {background: $bg-2;}
 .stripe { scroll-margin-top: $nav-h; }      //prevent anchor jump under sticky header
 
@@ -38,7 +53,7 @@ body {
     z-index: 9999;
     background: $bg;
     backdrop-filter: none;
-    border-bottom: 1px solid rgba(225, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, .08);
 }
 
 .site-nav {
@@ -67,6 +82,92 @@ body {
             font-size: 0.95rem;
         }
     }
+}
+
+// hero
+.accent-gradient {
+    background: linear-gradient(90deg, $accent 0%, #8fe3cf 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.hero {
+    padding-left: 0;
+    max-width: 1000px; // should keep lines readable
+}
+
+.hero_kicker {
+    color: $muted;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    font-size: clamp(.12rem, 2vw, 2rem);
+    margin: 0 0 .75rem 0;
+}
+
+.hero_title {
+    margin: 0 0 .4rem 0;
+    line-height: 1.02;
+    font-weight: 800;
+    font-size: clamp(3.5rem, 10vw, 7rem); //big, responsive
+}
+
+.hero_role {
+    margin: 0 0 .75rem 0;
+    color: $muted;
+    font-weight: 700;
+    line-height: 1.12;
+    font-size:clamp(1.6rem, 4.5vw, 3rem);
+}
+
+.hero_meta {
+    color: $muted;
+    margin: 0 0 1.4rem 0;
+    font-size: clamp(1rem, 1.8vw, 1.15rem);
+}
+
+// lil arrow
+.caret {color:$accent; margin-right: .5rem; font-size: 1.25em;}
+
+//hero social row
+.social--hero {
+    display: flex;
+    gap: .7rem;
+    margin: .5rem 0 1.2rem 0;
+    a {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 52px; height: 52px; border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, .22);
+        color: $text; 
+        transition: transform .15s ease, border-color .15s ease, background .15s ease;
+        &:hover {transform: translateY(-2px); border-color: rgba(255, 255, 255, .35); background: rgba(255, 255, 255, .06);}
+        &:focus-visible { outline: 2px solid $accent; outline-offset: 2px;}
+    }
+}
+
+// icon size
+.icon { width: 30px; height: 30px; fill: currentColor; }
+
+.hero_blurb {
+    margin: .5rem 0 1.1rem 0;
+    font-size: clamp(1.05rem, 2.2vw, 1.4rem);
+    color: $text;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    letter-spacing: .02em;
+    word-spacing: .05em;
+}
+
+.hero_resume {
+    display: inline-block;
+    color: $accent;
+    text-decoration: none;
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    border-bottom: 2px solid transparent;
+    transition: transform .15s ease, border-color .15s ease, color .15s ease;
+    &:hover { transform: translateY(-1px); border-color: currentColor;}
+    &:focus-visible { outline: 2px solid $accent; outline-offset: 2px;}
 }
 
 .brand {
@@ -99,6 +200,30 @@ body {
             background: rgba(255, 255, 255, .14);
         }
     }
+}
+
+// multi column grid for About (responsive)
+.columns {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+}
+
+//cards
+.col {
+    background: $bg-2;
+    border-radius: 14px;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, .18);
+}
+
+// breakpoints
+@media (max-width: 900px) {
+    .columns {grid-template-columns: repeat(2, 1fr);}
+}
+
+@media (max-width: 640px) {
+    .columns { grid-template-columns: 1fr;}
 }
 
 // Footer
