@@ -6,6 +6,7 @@ document.querySelectorAll('a[data-nav]').forEach(a => {
     a.addEventListener('click', e=> {
         e.preventDefault();
         const id = a.getAttribute('href');
+        setScrollMargin(); // in case nav height changed
         document.querySelector(id)?.scrollIntoView({behavior: 'smooth', block: 'start'});
     });
 });
@@ -14,11 +15,22 @@ document.querySelectorAll('a[data-nav]').forEach(a => {
 const siteNav = document.querySelector('.site-nav');
 const SHRINK_AT = 80;   //px scrolled
 
+const setScrollMargin = () => {
+  if (siteNav) {
+    const h = siteNav.getBoundingClientRect().height;
+    document.documentElement.style.setProperty('--nav-h', `${h}px`);
+  }
+};
+setScrollMargin();
+window.addEventListener('resize', setScrollMargin);
+
+
 let ticking = false;
 window.addEventListener('scroll', () => {
     if (!ticking) {
         requestAnimationFrame(() => {
             siteNav.classList.toggle('nav-shrink', window.scrollY > SHRINK_AT);
+            setScrollMargin();
             ticking = false;
         });
         ticking = true;
@@ -29,7 +41,7 @@ window.addEventListener('scroll', () => {
 const headerEl = document.querySelector('.site-header');
 const sectionEls = Array.from(document.querySelectorAll('main .stripe[id]'));
 const linkEls = Array.from(document.querySelectorAll('.menu a[data-nav]'));
-const linkById = new Map(linkEls.map(a => [a.getAttribute('href'.slice(1), a)]));
+const linkById = new Map(linkEls.map(a => [a.getAttribute('href').slice(1), a]));
 
 function setActive(id) {
     linkEls.forEach(a => {
@@ -108,17 +120,18 @@ if (rotator) {
     }
 }
 
-// ===== Modal: Projects =====
+// ===== Projects Modal (open/close, fill content) =====
 (() => {
   const modal = document.getElementById('project-modal');
   if (!modal) return;
 
-  const dialog = modal.querySelector('.modal__dialog');
+  const dialog  = modal.querySelector('.modal__dialog');
   const titleEl = modal.querySelector('#modal-title');
   const descEl  = modal.querySelector('#modal-desc');
   const linksEl = modal.querySelector('.modal__links');
   const openers = document.querySelectorAll('[data-open-modal]');
   const closeSelectors = '[data-close-modal]';
+
   let lastFocus = null;
 
   const getFocusable = (root) =>
@@ -127,7 +140,7 @@ if (rotator) {
     );
 
   function openModalFrom(btn) {
-    // fill content from data attributes
+    // Fill content from data- attributes on the button
     titleEl.textContent = btn.getAttribute('data-title') || 'Project';
     descEl.textContent  = btn.getAttribute('data-desc')  || '';
     linksEl.innerHTML = '';
@@ -139,18 +152,17 @@ if (rotator) {
         a.textContent = label;
         linksEl.appendChild(a);
       });
-    } catch { /* ignore malformed JSON */ }
+    } catch { /* ignore bad JSON */ }
 
     lastFocus = document.activeElement;
     modal.classList.add('is-open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.classList.add('no-scroll');
 
-    // focus the first focusable element in the dialog
+    // Focus first focusable in dialog
     const focusables = getFocusable(dialog);
     (focusables[0] || dialog).focus();
 
-    // listeners
     document.addEventListener('keydown', onKeydown);
     modal.addEventListener('click', onBackdrop);
     dialog.addEventListener('keydown', onTrapTab);
@@ -171,28 +183,95 @@ if (rotator) {
   function onBackdrop(e) {
     if (e.target.matches(closeSelectors) || e.target === modal) closeModal();
   }
-
   function onKeydown(e) {
     if (e.key === 'Escape') closeModal();
   }
-
   function onTrapTab(e) {
     if (e.key !== 'Tab') return;
     const focusables = Array.from(getFocusable(dialog));
     if (focusables.length === 0) return;
-
-    const first = focusables[0];
-    const last  = focusables[focusables.length - 1];
-
-    if (e.shiftKey && document.activeElement === first) {
-      e.preventDefault(); last.focus();
-    } else if (!e.shiftKey && document.activeElement === last) {
-      e.preventDefault(); first.focus();
-    }
+    const first = focusables[0], last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   }
 
-  // wire up
+  // Wire up all “open modal” buttons
   openers.forEach(btn => btn.addEventListener('click', () => openModalFrom(btn)));
+  // Wire close buttons/backdrop
   modal.querySelectorAll(closeSelectors).forEach(el => el.addEventListener('click', closeModal));
+})();
+
+
+// ===== Carousel =====
+(() => {
+  const root = document.getElementById('exp-carousel');
+  if (!root) return;
+
+  const viewport = root.querySelector('.carousel__viewport');
+  const track    = root.querySelector('.carousel__track');
+  const slides   = Array.from(root.querySelectorAll('.carousel__slide'));
+  const prev     = root.querySelector('.carousel__arrow--prev');
+  const next     = root.querySelector('.carousel__arrow--next');
+
+  let index = 0;
+  let startX = 0;
+  let dragging = false;
+
+  const slideW = () => viewport.clientWidth;
+
+  function snap(i) {
+    // clamp (no wrap)
+    index = Math.max(0, Math.min(i, slides.length - 1));
+    track.style.transition = 'transform .35s ease';
+    track.style.transform  = `translateX(${-index * slideW()}px)`;
+    prev.disabled = index === 0;
+    next.disabled = index === slides.length - 1;
+  }
+
+  function instant(x) {
+    track.style.transition = 'none';
+    track.style.transform  = `translateX(${x}px)`;
+  }
+
+  // buttons
+  prev.addEventListener('click', () => snap(index - 1));
+  next.addEventListener('click', () => snap(index + 1));
+
+  // keyboard (when viewport focused)
+  viewport.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); snap(index - 1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); snap(index + 1); }
+  });
+
+  // drag / swipe
+  viewport.addEventListener('pointerdown', e => {
+    startX = e.clientX;
+    dragging = true;
+    viewport.setPointerCapture(e.pointerId);
+  });
+
+  viewport.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    const dx = e.clientX - startX;
+    instant(-index * slideW() + dx);     // smooth tug in pixels
+  });
+
+  function endDrag(x) {
+    if (!dragging) return;
+    dragging = false;
+    const dx = x - startX;
+    const threshold = Math.min(120, slideW() * 0.15);
+    if (dx >  threshold) snap(index - 1);
+    else if (dx < -threshold) snap(index + 1);
+    else snap(index);
+  }
+
+  viewport.addEventListener('pointerup',    e => endDrag(e.clientX));
+  viewport.addEventListener('pointercancel',   () => snap(index));
+
+  // keep position on resize
+  window.addEventListener('resize', () => snap(index));
+
+  snap(0);
 })();
 

@@ -21,7 +21,6 @@
         </header>
 
         <main>
-
             <!-- Hero -->
             <section id="hero" class="stripe stripe--tall stripe--hero" aria-label="Hero">
                 <div class="container hero">
@@ -104,7 +103,6 @@
             <section id="projects" class="stripe stripe--projects" aria-label="Projects">
                 <div class="container">
                     <h2 class="header">Projects</h2>
-
                     <div class="projects-grid">
                     <!-- Card 1 -->
                     <button
@@ -189,24 +187,111 @@
 
 
             <!-- Experience -->
-            <section id="experience" class="stripe" aria-label="experience">
-                <div class="container">
-                    <h2 class="header">Experience</h2>
-                    <video controls width="100%">
-                        <source src="assets/demo.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
+            <section id="experience" class="stripe" aria-label="Experience">
+            <div class="container">
+                <h2 class="header">Experience</h2>
+
+                <div class="carousel" id="exp-carousel">
+                <button class="carousel__arrow carousel__arrow--prev" aria-label="Previous slide">
+                    &#10094;
+                </button>
+
+                <div class="carousel__viewport" tabindex="0" aria-live="polite">
+                    <ul class="carousel__track">
+                    <!-- Slide 1 -->
+                    <li class="carousel__slide">
+                        <div class="slide-card">
+                        <h3>No experience… yet 🙂</h3>
+                        <p>
+                            I’m actively applying for internships and building projects to
+                            prove real-world impact.
+                        </p>
+                        <ul class="bullets">
+                            <li>Shipping small apps monthly and refining past projects</li>
+                            <li>Practicing DSA + systems fundamentals</li>
+                            <li>Open to referrals & coffee chats</li>
+                        </ul>
+                        </div>
+                    </li>
+
+                    <!-- Slide 2 -->
+                    <li class="carousel__slide">
+                        <div class="slide-card">
+                        <h3>What I’m doing now</h3>
+                        <ul class="bullets">
+                            <li>Courses: Web Programming / Algorithms & Models of Computation/ Text Information Systems</li>
+                            <li>Tools: C/C++, Python, JS, Flask, HTML/CSS</li>
+                            <li>Applying for Summer internships/Co-ops</li>
+                        </ul>
+                        </div>
+                    </li>
+
+                    <!-- Slide 3 (your meme video) -->
+                    <li class="carousel__slide">
+                        <div class="slide-card slide-card--video">
+                        <video controls playsinline>
+                            <source src="assets/demo.mp4" type="video/mp4" />
+                            Your browser does not support the video tag.
+                        </video>
+                        </div>
+                    </li>
+                    </ul>
                 </div>
+
+                <button class="carousel__arrow carousel__arrow--next" aria-label="Next slide">
+                    &#10095;
+                </button>
+                </div>
+            </div>
             </section>
 
 
             <!-- Contact -->
-            <section id="contact" class="stripe" aria-label="Contact">
-                <div class="container">
-                    <h2 class="header">Contact</h2>
-                    <p>Email: <a href="mailto:dannyq2@illinois.edu">dannyq2@illinois.edu</a></p>
+            <section id="contact" class="stripe stripe--contact" aria-label="Contact">
+                <div class="container contact">
+                    <div class="contact-grid">
+                    <!-- Right: avatar (on mobile this comes first) -->
+                    <div class="contact__right">
+                        <div class="contact__avatar">
+                        <img src="assets/headshot.jpg" alt="Danny Quillo headshot" class="contact__photo">
+                        </div>
+                    </div>
+
+                    <!-- Left: text + icons -->
+                    <div class="contact__left">
+                        <p class="contact__kicker">Discuss a project or just want to say hi? My inbox is open for all.</p>
+                        <h2 class="contact__title">Reach Out to me!</h2>
+
+                        <p class="contact__bio">
+                        I’m a Computer Science student at UIUC focused on systems, networks, and practical software.
+                        I’m currently applying for Summer internships. If you’d like to chat or collaborate, feel free to
+                        reach out anytime—I'd love to connect.
+                        </p>
+
+                        <div class="contact__icons" aria-label="Contact links">
+                        <a class="icon-btn" href="https://github.com/danielquillo" target="_blank" rel="noopener" aria-label="GitHub">
+                            <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+                            <path d="M8 .2a8 8 0 0 0-2.53 15.6c.4.07.55-.17.55-.38v-1.33c-2.24.49-2.71-1.08-2.71-1.08-.36-.9-.88-1.14-.88-1.14-.72-.49.05-.48.05-.48.8.06 1.22.83 1.22.83.7 1.2 1.84.85 2.29.65.07-.5.27-.85.5-1.05-1.79-.2-3.67-.9-3.67-4a3.1 3.1 0 0 1 .84-2.16c-.08-.2-.36-1.01.08-2.1 0 0 .68-.22 2.22.83a7.6 7.6 0 0 1 4.04 0c1.54-1.05 2.22-.83 2.22-.83.44 1.09.16 1.9.08 2.1.52.57.84 1.3.84 2.16 0 3.1-1.88 3.8-3.68 4 .28.24.53.72.53 1.47v2.18c0 .21.15.45.55.38A8 8 0 0 0 8 .2Z"/>
+                            </svg>
+                        </a>
+
+                        <a class="icon-btn" href="https://www.linkedin.com/in/daniel-quillo-a937b5383/" target="_blank" rel="noopener" aria-label="LinkedIn">
+                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5 2.5 2.5 0 0 1 4.98 3.5ZM3 9h4v12H3zM10 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.3c0-1.27-.02-2.9-1.76-2.9-1.77 0-2.04 1.38-2.04 2.8V21H10z"/>
+                            </svg>
+                        </a>
+
+                        <a class="icon-btn" href="mailto:dannyq2@illinois.edu" aria-label="Email">
+                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5L4 8V6l8 5 8-5v2Z"/>
+                            </svg>
+                        </a>
+                        </div>
+                    </div>
+                    </div>
                 </div>
             </section>
+
         </main>
     
         <!-- Footer -->
