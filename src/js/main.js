@@ -107,3 +107,92 @@ if (rotator) {
         rotator.textContent = roles[0];
     }
 }
+
+// ===== Modal: Projects =====
+(() => {
+  const modal = document.getElementById('project-modal');
+  if (!modal) return;
+
+  const dialog = modal.querySelector('.modal__dialog');
+  const titleEl = modal.querySelector('#modal-title');
+  const descEl  = modal.querySelector('#modal-desc');
+  const linksEl = modal.querySelector('.modal__links');
+  const openers = document.querySelectorAll('[data-open-modal]');
+  const closeSelectors = '[data-close-modal]';
+  let lastFocus = null;
+
+  const getFocusable = (root) =>
+    root.querySelectorAll(
+      'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+    );
+
+  function openModalFrom(btn) {
+    // fill content from data attributes
+    titleEl.textContent = btn.getAttribute('data-title') || 'Project';
+    descEl.textContent  = btn.getAttribute('data-desc')  || '';
+    linksEl.innerHTML = '';
+    try {
+      const linkData = JSON.parse(btn.getAttribute('data-links') || '[]');
+      linkData.forEach(({ label, href }) => {
+        const a = document.createElement('a');
+        a.href = href; a.target = '_blank'; a.rel = 'noopener';
+        a.textContent = label;
+        linksEl.appendChild(a);
+      });
+    } catch { /* ignore malformed JSON */ }
+
+    lastFocus = document.activeElement;
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('no-scroll');
+
+    // focus the first focusable element in the dialog
+    const focusables = getFocusable(dialog);
+    (focusables[0] || dialog).focus();
+
+    // listeners
+    document.addEventListener('keydown', onKeydown);
+    modal.addEventListener('click', onBackdrop);
+    dialog.addEventListener('keydown', onTrapTab);
+  }
+
+  function closeModal() {
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('no-scroll');
+
+    document.removeEventListener('keydown', onKeydown);
+    modal.removeEventListener('click', onBackdrop);
+    dialog.removeEventListener('keydown', onTrapTab);
+
+    if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+  }
+
+  function onBackdrop(e) {
+    if (e.target.matches(closeSelectors) || e.target === modal) closeModal();
+  }
+
+  function onKeydown(e) {
+    if (e.key === 'Escape') closeModal();
+  }
+
+  function onTrapTab(e) {
+    if (e.key !== 'Tab') return;
+    const focusables = Array.from(getFocusable(dialog));
+    if (focusables.length === 0) return;
+
+    const first = focusables[0];
+    const last  = focusables[focusables.length - 1];
+
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault(); last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault(); first.focus();
+    }
+  }
+
+  // wire up
+  openers.forEach(btn => btn.addEventListener('click', () => openModalFrom(btn)));
+  modal.querySelectorAll(closeSelectors).forEach(el => el.addEventListener('click', closeModal));
+})();
+

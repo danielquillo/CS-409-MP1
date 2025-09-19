@@ -9,9 +9,8 @@ $maxw: 1100px;
 $nav-h: 72px;
 $nav-h-sm: 56px;
 $stripe-pad: clamp(4rem, 8vw, 7rem);
-$stripe-pad-lg: clamp(6rem, 5vw, 10rem);
 
-// Base
+// Base + Section Header
 * {box-sizing: border-box; }
 html, body { min-height: 100vh; }
 html { scroll-behavior: smooth; } // smooth scrolling
@@ -21,6 +20,15 @@ body {
     background: $bg;
     font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
 }
+.header {
+    color: $muted;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    font-size: clamp(.12rem, 2vw, 2rem);
+    margin-left: -7.5rem;
+    margin-top: 0;
+    line-height: 1;
+}
 
 //Layout Helpers
 .container {
@@ -28,42 +36,54 @@ body {
     margin-inline: auto;
 }
 
-// stripe stuff
-.stripe { padding-block: $stripe-pad; }
+// Stripe stuff
+.stripe { 
+    padding-block: $stripe-pad;
+    scroll-margin-top: $nav-h;
+    padding-top: clamp(0.5rem, 1.5vw, 1.25rem);   // much smaller top space 
+}
 .stripe--tall {
     min-height: calc(100vh - #{$nav-h});
     display: block;
-    // place-items: start;
+    padding-top: clamp(1rem, 2.5vw, 2rem);  /* was using $stripe-pad via .stripe */
+    padding-bottom: $stripe-pad;            /* keep bottom breathing room */
 }
-
 .stripe--hero {
     padding-top: clamp(6rem, 10vh, 24vh);
     margin-left: -15rem;
 }
-
 .stripe--about {
-    padding-block: $stripe-pad-lg;
+    padding-bottom: clamp(3rem, 5vw, 5.5rem);     // keep some bottom breathing room
+    --overlay: rgba(15, 18, 32, 0.3);
+    background-image: linear-gradient(var(--overlay), var(--overlay)), url('../assets/campus.jpg');
+    background-size: auto, cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: scroll, fixed;
 }
-.stripe:nth-of-type(even) {background: $bg-2;}
-.stripe { scroll-margin-top: $nav-h; }      //prevent anchor jump under sticky header
+.stripe--projects {
+    padding-bottom: clamp(3rem, 5vw, 5.5rem);     // keep some bottom breathing room
+}
+#projects .container {
+    width: min(100% - 2rem, 1100px); // extra width for project grid
+}
 
-//Header
+//Site Header
 .site-header {
     position: sticky;
     top: 0;
     z-index: 9999;
+    // background: linear-gradient(90deg, $accent 0%, #508075 100%);
     background: $bg;
     backdrop-filter: none;
     border-bottom: 1px solid rgba(255, 255, 255, .08);
 }
-
 .brand {
     color: $text;
     text-decoration: none;
     font-weight: 800;
     margin-left: -7.5rem;
 }
-
 .menu {
     list-style: none;
     margin: 0 0 0 auto;
@@ -90,7 +110,7 @@ body {
     }
 }
 
-// Nav
+// Navbar
 .site-nav {
     height: $nav-h;
     display: flex;
@@ -126,12 +146,10 @@ body {
     background-clip: text;
     color: transparent;
 }
-
 .hero {
     padding-left: 0px;
     max-width: none; // should keep lines readable
 }
-
 .hero_kicker {
     color: $muted;
     letter-spacing: .14em;
@@ -139,14 +157,12 @@ body {
     font-size: clamp(.12rem, 2vw, 2rem);
     margin: 0 0 .75rem 0;
 }
-
 .hero_title {
     margin: 0 0 .4rem 0;
     line-height: 1.02;
     font-weight: 800;
     font-size: clamp(3.5rem, 10vw, 7rem); //big, responsive
 }
-
 .hero_role {
     margin: 0 0 .75rem 0;
     color: $muted;
@@ -154,11 +170,7 @@ body {
     line-height: 1.12;
     font-size:clamp(1.6rem, 4.5vw, 3rem);
 }
-
-// lil arrow
-.caret {color:$accent; margin-right: .5rem; font-size: 1.25em;}
-
-//hero social row
+.caret {color:$accent; margin-right: .5rem; font-size: 1.25em;} // lil arrow
 .social--hero {
     display: flex;
     gap: 1rem;
@@ -173,10 +185,7 @@ body {
         &:focus-visible { outline: 2px solid $accent; outline-offset: 2px;}
     }
 }
-
-// icon size
 .icon { width: 30px; height: 30px; fill: currentColor; }
-
 .hero_blurb {
     margin: .5rem 0 1.1rem 0;
     font-size: clamp(1.05rem, 1.8rem, 2rem);
@@ -188,11 +197,6 @@ body {
     overflow-wrap: normal;
     word-break: normal;
 }
-
-@media (max-width: 900px) {
-    .hero_blurb { white-space: normal;} // wrap on small screens
-}
-
 .hero_resume {
     display: inline-block;
     color: $accent;
@@ -223,12 +227,6 @@ body {
     animation: roleSwapIn 220 ms ease;
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .role-swap { animation: none; }
-}
-
-
-
 /* === About: three-feature row === */
 .features {
   display: grid;
@@ -237,13 +235,11 @@ body {
   text-align: center;
   align-items: start;
 }
-
 .feature {
   padding: 0 1rem;
   transition: transform .2s ease;
   &:hover { transform: translateY(-2px); }
 }
-
 .feature__icon {
   width: 80px; height: 80px;
   margin: 0 auto 1rem auto;
@@ -255,17 +251,15 @@ body {
   transition: border-color .2s ease, background .2s ease, transform .2s ease;
 
   /* give the circle inside the SVG no stroke by default */
-  .icon { width: 36px; height: 36px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+  .icon { width: 50px; height: 50px; fill: none; stroke: currentColor; stroke-width: 1.8; }
   &:hover { border-color: rgba(255,255,255,.45); background: rgba(255,255,255,.06); }
 }
-
 .feature h3 {
   margin: .25rem 0 .5rem 0;
   font-size: clamp(1.15rem, 2.2vw, 1.5rem);
   font-weight: 700;
   color: $text;
 }
-
 .feature p {
   margin: 0 auto;
   max-width: 38ch;
@@ -274,12 +268,139 @@ body {
   font-size: clamp(.95rem, 1.6vw, 1.05rem);
 }
 
-/* Responsive collapse */
-@media (max-width: 900px) {
-  .features { grid-template-columns: repeat(2, 1fr); }
+/* === Projects grid of 3 tiles === */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 2.5vw, 1.75rem);
 }
-@media (max-width: 640px) {
-  .features { grid-template-columns: 1fr; }
+
+/* Big clickable tile */
+.project-card {
+  position: relative;
+  aspect-ratio: 3 / 2;               /* nice wide rectangle */
+  min-height: 240px;           /* ensure some height on very wide screens */
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.12);
+  background: #0b0f1a;
+  padding: 0;
+  cursor: pointer;
+  color: $text;
+  text-align: left;
+  box-shadow: 0 10px 24px rgba(0,0,0,.22);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.project-card__media {
+  position: absolute; inset: 0;
+  background: var(--image) center / cover no-repeat;
+  transform: scale(1);
+  transition: transform .35s ease;
+}
+
+/* soft bottom gradient for the label */
+.project-card::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,.0) 45%, rgba(0,0,0,.5) 100%);
+  pointer-events: none;
+  opacity: .75;
+}
+
+/* hover overlay + magnifier */
+.project-card__overlay {
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  background: rgba(0,0,0,0);
+  opacity: 0;
+  transition: opacity .2s ease, background .2s ease;
+}
+.project-card__icon {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  padding: 12px;
+  background: rgba(0,0,0,.5);
+  color: #fff;
+  transform: scale(.92);
+  transition: transform .2s ease, opacity .2s ease;
+  opacity: .95;
+}
+
+/* project label at the bottom-left */
+.project-card__label {
+  position: absolute; left: 14px; bottom: 12px;
+  font-weight: 800;
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  text-shadow: 0 2px 8px rgba(0,0,0,.6);
+}
+
+/* interactions */
+.project-card:hover { 
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,.22);
+}
+.project-card:hover .project-card__media { transform: scale(1.06); }
+.project-card:hover .project-card__overlay { opacity: 1; background: rgba(0,0,0,.12); }
+.project-card:focus-visible { outline: 3px solid $accent; outline-offset: 3px; }
+
+/* responsive */
+@media (max-width: 1000px) { .projects-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px)  { .projects-grid { grid-template-columns: 1fr; } }
+
+:root { --shadow: 0 20px 60px rgba(0,0,0,.45); }
+body.no-scroll { overflow: hidden; }
+
+.modal {
+  position: fixed; inset: 0;
+  display: grid; place-items: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity .2s ease;
+  z-index: 99999;
+}
+.modal.is-open { opacity: 1; pointer-events: auto; }
+
+.modal__backdrop {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,.55);
+}
+.modal__dialog {
+  position: relative;
+  width: min(92vw, 720px);
+  background: $bg-2;
+  color: $text;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: clamp(1rem, 3vw, 1.5rem);
+  transform: translateY(8px);
+  transition: transform .2s ease, opacity .2s ease;
+  opacity: .98;
+}
+
+.is-open .modal__dialog { transform: none; opacity: 1; }
+
+.modal__close {
+  position: absolute; top: .5rem; right: .6rem;
+  width: 36px; height: 36px; border-radius: 8px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: transparent; color: $text; font-size: 1.25rem; line-height: 1;
+  cursor: pointer;
+  &:hover { background: rgba(255,255,255,.06); }
+}
+.modal__links {
+  display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem;
+  a {
+    display: inline-block;
+    padding: .45rem .7rem; border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.22);
+    color: $text; text-decoration: none; font-weight: 600;
+    &:hover { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.35); color: $accent; }
+  }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .modal, .modal__dialog { transition: none; }
 }
 
 
@@ -287,4 +408,18 @@ body {
 .site-footer {
     padding-block: 2rem;
     background: #0b0e1a;
+}
+
+
+/* Responsive collapse */
+@media (max-width: 900px) {
+  .features { grid-template-columns: repeat(2, 1fr); }
+  .stripe--about {background-attachment: scroll, scroll;} /* disable fixed on smaller screens */
+  .hero_blurb { white-space: normal;} // wrap on small screens
+}
+@media (max-width: 640px) {
+  .features { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .role-swap { animation: none; }
 }
